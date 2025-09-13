@@ -7,4 +7,4 @@ def extended_gcd(a,b):
 
 a = int(input("a: "))
 b = int(input("b: "))
-print(extended_gcd(max(a, b), min(a, b)))
+print(extended_gcd(a, b))
