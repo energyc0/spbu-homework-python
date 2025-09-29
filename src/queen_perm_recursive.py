@@ -11,16 +11,18 @@ def read_N():
         return 0
     return N
 
+
 def is_good_pos(board, col, row):
     for i in range(col):
         if row == board[i] or col - i == abs(row - board[i]):
             return False
     return True
 
+
 def _count_good_perms_impl(board, col):
     if len(board) <= col:
         return 1
-    
+
     res = 0
     for row in range(len(board)):
         if is_good_pos(board, col, row):
@@ -28,6 +30,7 @@ def _count_good_perms_impl(board, col):
             res += _count_good_perms_impl(board, col + 1)
 
     return res
+
 
 def count_good_perms(N):
     board = [-1] * N

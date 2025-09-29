@@ -1,12 +1,13 @@
 def merge_sort(arr):
     if len(arr) <= 1:
         return arr
-    
+
     mid = len(arr) // 2
     left = merge_sort(arr[0:mid])
     right = merge_sort(arr[mid:])
-    
+
     return _merge(left, right)
+
 
 def _merge(left, right):
     result = []
@@ -20,16 +21,15 @@ def _merge(left, right):
         else:
             result.append(right[j])
             j += 1
-    
+
     result.extend(left[i:])
     result.extend(right[j:])
-    
 
     return result
+
 
 try:
     arr = list(map(int, input("Enter numbers: ").split()))
     print(merge_sort(arr))
 except:
     print("Expected numbers!")
-    

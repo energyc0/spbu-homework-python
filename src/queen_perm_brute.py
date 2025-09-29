@@ -1,5 +1,6 @@
 import itertools
 
+
 def read_N():
     try:
         N = int(input("Enter N: "))
@@ -13,6 +14,7 @@ def read_N():
         return 0
     return N
 
+
 def is_good_perm(board):
     n = len(board)
     for i in range(n):
@@ -20,6 +22,7 @@ def is_good_perm(board):
             if j - i == abs(board[j] - board[i]):
                 return False
     return True
+
 
 def count_good_perms(N):
     res = 0
@@ -30,10 +33,11 @@ def count_good_perms(N):
 
     return res
 
+
 N = read_N()
 if N <= 0:
     exit(1)
-    
+
 res = count_good_perms(N)
 
 print(f"Good permutations: {res}")

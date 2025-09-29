@@ -11,27 +11,27 @@ def read_N():
         return 0
     return N
 
+
 def count_good_perms(N):
     def _count_good_perms(cols, left_diag, right_diag, ones):
         if cols == ones:
             return 1
-        
+
         free_positions = ones & ~(left_diag | right_diag | cols)
         res = 0
         while free_positions:
             pos = free_positions & -free_positions
-            free_positions &= (~pos)
+            free_positions &= ~pos
 
             res += _count_good_perms(
-                cols | pos,
-                (left_diag | pos) << 1,
-                (right_diag | pos) >> 1,
-                ones)
+                cols | pos, (left_diag | pos) << 1, (right_diag | pos) >> 1, ones
+            )
 
         return res
-    
+
     ones = (1 << N) - 1
     return _count_good_perms(0, 0, 0, ones)
+
 
 N = read_N()
 if N <= 0:
