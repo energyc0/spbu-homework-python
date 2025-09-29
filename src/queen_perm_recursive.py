@@ -1,7 +1,7 @@
-def read_N():
+def read_n():
     try:
-        N = int(input("Enter N: "))
-        if N <= 0:
+        n = int(input("Enter N: "))
+        if n <= 0:
             raise Exception("Expected N > 0")
     except ValueError:
         print("Expected a number!")
@@ -9,7 +9,7 @@ def read_N():
     except Exception as err:
         print(err)
         return 0
-    return N
+    return n
 
 
 def is_good_pos(board, col, row):
@@ -32,12 +32,12 @@ def _count_good_perms_impl(board, col):
     return res
 
 
-def count_good_perms(N):
-    board = [-1] * N
+def count_good_perms(n):
+    board = [-1] * n
     return _count_good_perms_impl(board, 0)
 
 
-N = read_N()
+N = read_n()
 if N <= 0:
     exit(1)
 

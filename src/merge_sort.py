@@ -31,5 +31,5 @@ def _merge(left, right):
 try:
     arr = list(map(int, input("Enter numbers: ").split()))
     print(merge_sort(arr))
-except:
+except (ValueError, EOFError):
     print("Expected numbers!")

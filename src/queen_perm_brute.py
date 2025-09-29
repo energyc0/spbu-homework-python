@@ -1,10 +1,10 @@
 import itertools
 
 
-def read_N():
+def read_n():
     try:
-        N = int(input("Enter N: "))
-        if N <= 0:
+        n = int(input("Enter N: "))
+        if n <= 0:
             raise Exception("Expected N > 0")
     except ValueError:
         print("Expected a number!")
@@ -12,7 +12,7 @@ def read_N():
     except Exception as err:
         print(err)
         return 0
-    return N
+    return n
 
 
 def is_good_perm(board):
@@ -24,17 +24,17 @@ def is_good_perm(board):
     return True
 
 
-def count_good_perms(N):
+def count_good_perms(n):
     res = 0
 
-    for perm in itertools.permutations(range(N)):
+    for perm in itertools.permutations(range(n)):
         if is_good_perm(perm):
             res += 1
 
     return res
 
 
-N = read_N()
+N = read_n()
 if N <= 0:
     exit(1)
 

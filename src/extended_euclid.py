@@ -1,9 +1,8 @@
 def extended_gcd(a, b):
     if b == 0:
         return a, 1, 0
-    else:
-        d, y, x = extended_gcd(b, a % b)
-        return d, x, (d - a * x) // b
+    d, y, x = extended_gcd(b, a % b)
+    return d, x, (d - a * x) // b
 
 
 a = int(input("a: "))

@@ -1,7 +1,7 @@
-def read_N():
+def read_n():
     try:
-        N = int(input("Enter N: "))
-        if N <= 0:
+        n = int(input("Enter N: "))
+        if n <= 0:
             raise Exception("Expected N > 0")
     except ValueError:
         print("Expected a number!")
@@ -9,10 +9,10 @@ def read_N():
     except Exception as err:
         print(err)
         return 0
-    return N
+    return n
 
 
-def count_good_perms(N):
+def count_good_perms(n):
     def _count_good_perms(cols, left_diag, right_diag, ones):
         if cols == ones:
             return 1
@@ -29,11 +29,11 @@ def count_good_perms(N):
 
         return res
 
-    ones = (1 << N) - 1
+    ones = (1 << n) - 1
     return _count_good_perms(0, 0, 0, ones)
 
 
-N = read_N()
+N = read_n()
 if N <= 0:
     exit(1)
 
