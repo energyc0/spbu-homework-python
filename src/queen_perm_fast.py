@@ -1,42 +1,64 @@
+"""
+
+Board is an array of queen position in the row in the 'i' column.
+
+It is more effecient, because
+you can place only one queen in one row and in one column,
+so all we need is to check beating queens diagonally.
+
+So all the queen permutations can be represented as
+a permutations of an array of [1:n] numbers.
+
+"""
+
+
 def read_N():
-    try:
-        N = int(input("Enter N: "))
-        if N <= 0:
-            raise Exception("Expected N > 0")
-    except ValueError:
-        print("Expected a number!")
-        return 0
-    except Exception as err:
-        print(err)
-        return 0
+    N = int(input("Enter N: "))
+    if N <= 0:
+        raise Exception("Expected N > 0")
     return N
 
 def count_good_perms(N):
-    def _count_good_perms(cols, left_diag, right_diag, ones):
+    # Remember the value so that you don't have to calculate it.
+    # It is a mask of N ones.
+    ones = (1 << N) - 1
+    def _count_good_perms(cols, left_diag, right_diag):
+        # We have used all the columns.
         if cols == ones:
             return 1
         
+        # Calculate free positions.
+        # In other words,
+        # free_positions = all_positions
+        #                   - busy_positions
+        #                   - queens_beating_on_the_left
+        #                   - queens_beating_on_the_right
         free_positions = ones & ~(left_diag | right_diag | cols)
         res = 0
+        
+        # 
+        # While there are any positions in the mask.
         while free_positions:
+            # Get the most right position.
             pos = free_positions & -free_positions
+            # Mark it as busy.
             free_positions &= (~pos)
-
+            # Shift positions of beating queens and
+            # add new pos to 'busy_positions'.
             res += _count_good_perms(
                 cols | pos,
                 (left_diag | pos) << 1,
-                (right_diag | pos) >> 1,
-                ones)
+                (right_diag | pos) >> 1)
 
         return res
     
-    ones = (1 << N) - 1
-    return _count_good_perms(0, 0, 0, ones)
+    return _count_good_perms(0, 0, 0)
 
-N = read_N()
-if N <= 0:
-    exit(1)
-
-res = count_good_perms(N)
-
-print(f"Good permutations: {res}")
+try:
+    N = read_N()
+    res = count_good_perms(N)
+    print(f"Good permutations: {res}")
+except ValueError:
+    print("Expected a number!")
+except Exception as err:
+    print(err)
