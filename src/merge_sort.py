@@ -1,3 +1,5 @@
+# Divide recursively one big array into two,
+# sort and merge them into sorted one.
 def merge_sort(arr):
     if len(arr) <= 1:
         return arr
@@ -9,6 +11,7 @@ def merge_sort(arr):
     return _merge(left, right)
 
 
+# Merge two sorted arrays into one and return it.
 def _merge(left, right):
     result = []
     i = 0

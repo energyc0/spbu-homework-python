@@ -1,3 +1,5 @@
+# Algorithm of calculating GCD of two numbers
+# and Bezout's coefficients.
 def extended_gcd(a, b):
     if b == 0:
         return a, 1, 0
