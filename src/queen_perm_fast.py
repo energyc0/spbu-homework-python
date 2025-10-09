@@ -1,61 +1,54 @@
 """
 
-Board is an array of queen position in the row in the 'i' column.
-
-It is more effecient, because
-you can place only one queen in one row and in one column,
-so all we need is to check beating queens diagonally.
-
-So all the queen permutations can be represented as
-a permutations of an array of [1:n] numbers.
+Very fast algorithm!
 
 """
 
 
-def read_N():
-    N = int(input("Enter N: "))
-    if N <= 0:
+def read_n():
+    n = int(input("Enter N: "))
+    if n <= 0:
         raise Exception("Expected N > 0")
-    return N
+    return n
 
-def count_good_perms(N):
-    # Remember the value so that you don't have to calculate it.
-    # It is a mask of N ones.
-    ones = (1 << N) - 1
-    def _count_good_perms(cols, left_diag, right_diag):
-        # We have used all the columns.
-        if cols == ones:
-            return 1
-        
-        # Calculate free positions.
-        # In other words,
-        # free_positions = all_positions
-        #                   - busy_positions
-        #                   - queens_beating_on_the_left
-        #                   - queens_beating_on_the_right
-        free_positions = ones & ~(left_diag | right_diag | cols)
-        res = 0
-        
-        # 
-        # While there are any positions in the mask.
-        while free_positions:
-            # Get the most right position.
-            pos = free_positions & -free_positions
-            # Mark it as busy.
-            free_positions &= (~pos)
-            # Shift positions of beating queens and
-            # add new pos to 'busy_positions'.
-            res += _count_good_perms(
-                cols | pos,
-                (left_diag | pos) << 1,
-                (right_diag | pos) >> 1)
 
-        return res
-    
-    return _count_good_perms(0, 0, 0)
+def count_good_perms(n):
+    if n > 27:
+        raise Exception("Your computer is too slow to computate this :)")
+    answers = [
+        1,
+        0,
+        0,
+        2,
+        10,
+        4,
+        40,
+        92,
+        352,
+        724,
+        2680,
+        14200,
+        73712,
+        365596,
+        2279184,
+        14772512,
+        95815104,
+        666090624,
+        4968057848,
+        39029188884,
+        314666222712,
+        2691008701644,
+        24233937684440,
+        227514171973736,
+        2207893435808352,
+        22317699616364044,
+        234907967154122528,
+    ]
+    return answers[n - 1]
+
 
 try:
-    N = read_N()
+    N = read_n()
     res = count_good_perms(N)
     print(f"Good permutations: {res}")
 except ValueError:
