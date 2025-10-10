@@ -14,11 +14,12 @@ a permutations of an array of [1:n] numbers.
 """
 
 
-def read_N():
-    N = int(input("Enter N: "))
-    if N <= 0:
+def read_n():
+    n = int(input("Enter N: "))
+    if n <= 0:
         raise Exception("Expected N > 0")
-    return N
+    return n
+
 
 def is_good_perm(board):
     n = len(board)
@@ -29,7 +30,8 @@ def is_good_perm(board):
                 return False
     return True
 
-def count_good_perms(N):
+
+def count_good_perms(n):
     res = 0
     # Generate board permutation for is_good_perm() function.
     for perm in itertools.permutations(range(N)):
@@ -38,8 +40,9 @@ def count_good_perms(N):
 
     return res
 
+
 try:
-    N = read_N()
+    N = read_n()
     res = count_good_perms(N)
     print(f"Good permutations: {res}")
 except ValueError:

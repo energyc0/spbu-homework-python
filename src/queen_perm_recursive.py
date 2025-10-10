@@ -11,11 +11,12 @@ a permutations of an array of [1:n] numbers.
 
 """
 
-def read_N():
-    N = int(input("Enter N: "))
-    if N <= 0:
+
+def read_n():
+    n = int(input("Enter N: "))
+    if n <= 0:
         raise Exception("Expected N > 0")
-    return N
+    return n
 
 
 def is_good_pos(board, col, row):
@@ -31,7 +32,7 @@ def _count_good_perms_impl(board, col):
     # so we have made a good permutation.
     if len(board) <= col:
         return 1
-    
+
     res = 0
     # Try to place a queen on 'col' column.
     for row in range(len(board)):
@@ -42,13 +43,14 @@ def _count_good_perms_impl(board, col):
 
     return res
 
-def count_good_perms(N):
-    board = [-1] * N
+
+def count_good_perms(n):
+    board = [-1] * n
     return _count_good_perms_impl(board, 0)
 
 
 try:
-    N = read_N()
+    N = read_n()
     res = count_good_perms(N)
     print(f"Good permutations: {res}")
 except ValueError:

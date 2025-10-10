@@ -1,13 +1,17 @@
+# Divide recursively one big array into two,
+# sort and merge them into sorted one.
 def merge_sort(arr):
     if len(arr) <= 1:
         return arr
-    
+
     mid = len(arr) // 2
     left = merge_sort(arr[0:mid])
     right = merge_sort(arr[mid:])
-    
+
     return _merge(left, right)
 
+
+# Merge two sorted arrays into one and return it.
 def _merge(left, right):
     result = []
     i = 0
@@ -20,16 +24,15 @@ def _merge(left, right):
         else:
             result.append(right[j])
             j += 1
-    
+
     result.extend(left[i:])
     result.extend(right[j:])
-    
 
     return result
+
 
 try:
     arr = list(map(int, input("Enter numbers: ").split()))
     print(merge_sort(arr))
-except:
+except (ValueError, EOFError):
     print("Expected numbers!")
-    
