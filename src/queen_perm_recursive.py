@@ -27,6 +27,7 @@ def is_good_pos(board, col, row):
             return False
     return True
 
+
 def _count_good_perms_impl(board, col):
     # We have reached the end of the array
     # so we have made a good permutation.
