@@ -27,8 +27,9 @@ def heap_sort(arr: list) -> list:
     return arr
 
 
-try:
-    in_array = list(map(int, input("Enter numbers:\n").split()))
-    print(heap_sort(in_array))
-except:  # noqa: E722
-    print("Expected numbers!")
+if __name__ == "__main__":
+    try:
+        in_array = list(map(int, input("Enter numbers:\n").split()))
+        print(heap_sort(in_array))
+    except (EOFError, KeyboardInterrupt, ValueError, TypeError):
+        print("Expected numbers!")
