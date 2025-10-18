@@ -2,23 +2,27 @@ import pytest
 import types
 from src.curring import curry, uncurry
 
-def foo():  
-    '''Helper function for following tests.'''
+
+def foo():
+    """Helper function for following tests."""
     return 1
 
 
 def megasum(a, *args):
-    '''Helper function for following tests.'''
+    """Helper function for following tests."""
     for val in args:
         a += val
     return a
 
+
 def test_type_curry():
     assert isinstance(curry(foo, 0), types.FunctionType)
+
 
 def test_type_uncurry():
     f = curry(foo, 0)
     assert isinstance(uncurry(f, 0), types.FunctionType)
+
 
 def test_sum():
     def mysum(a, b, c):
@@ -47,6 +51,7 @@ def test_multiple_funcs():
     assert f2() == 2
     assert f3() == 3
     assert f1() == 1
+
 
 @pytest.mark.parametrize(
     ["args", "expected"],
@@ -77,7 +82,7 @@ def test_argcount():
 
     def myfoo():
         return 1234
-    
+
     with pytest.raises(Exception):
         curry(myfoo, 1)
     with pytest.raises(Exception):
@@ -85,11 +90,11 @@ def test_argcount():
     with pytest.raises(Exception):
         curry(megasum, 0)
 
+
 def test_uncurried():
     f = curry(megasum, 4)
     f = uncurry(f, 4)
-    assert f(1,2,3,4) == 1 + 2 + 3 + 4
+    assert f(1, 2, 3, 4) == 1 + 2 + 3 + 4
 
     with pytest.raises(TypeError):
-        f(1,2)
-        
+        f(1, 2)
