@@ -28,10 +28,13 @@ def test_sum():
     def mysum(a, b, c):
         return a + b + c
 
-    f = curry(mysum, 3)
-    assert f(1)(2)(3) == 6
-    assert f(1, 3, 4) == 8
-    assert f(1)(2, 6) == 9
+    assert curry(mysum, 3)(1)(2)(3) == 6
+    with pytest.raises(TypeError):
+        curry(mysum, 3)(1, 3, 4)
+    with pytest.raises(TypeError):
+        curry(mysum, 3)(1)(2, 6)
+    with pytest.raises(TypeError):
+        curry(mysum, 3)()
 
 
 def test_multiple_funcs():
@@ -61,15 +64,10 @@ def test_multiple_funcs():
     ],
 )
 def test_variadic_args(args, expected):
-    def megasum(a, *args):
-        for val in args:
-            a += val
-        return a
-
-    result = curry(megasum, len(args))
+    megasum_curry = curry(megasum, len(args))
     for arg in args:
-        result = result(arg)
-    assert result == expected
+        megasum_curry = megasum_curry(arg)
+    assert megasum_curry == expected
 
 
 def test_argcount():

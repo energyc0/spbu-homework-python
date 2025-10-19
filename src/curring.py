@@ -4,12 +4,14 @@ import inspect
 def curry(func, argc):
     """
     This function turns the given function into a set of nested functions.
+    Curried function can get only one argument at a time.
 
     func: is a function to be turned into curried function.
     argc: is a number of arguments that the given function takes.
     return: curried function.
 
     curry() raises ValueError if given argument count is not correct.
+    Returned function raises TypeError if invalid arguments were given in function call.
     """
     # If function has *arg- or **kwarg-like parameters
     is_variadic = (inspect.CO_VARARGS | inspect.CO_VARKEYWORDS) & func.__code__.co_flags
@@ -25,8 +27,16 @@ def curry(func, argc):
     if (argc < arg_count) or (argc > arg_count and not is_variadic):
         raise ValueError("Invalid arguments count in 'curry()'.")
 
+    arg_collected = 0
+
     def _inner(*args):
-        if len(args) >= argc:
+        nonlocal arg_collected
+        if len(args) - arg_collected > 1:
+            raise TypeError("Found more than one argument in function call.")
+        if len(args) - arg_collected == 0 and argc > 0:
+            raise TypeError("Argument expected.")
+        arg_collected = len(args)
+        if argc == arg_collected:
             return func(*args)
 
         def _partial(*more_args):
