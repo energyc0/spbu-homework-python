@@ -68,13 +68,3 @@ def uncurry(func, argc):
         return result
 
     return _uncurried
-
-
-def foo(a, b, c):
-    return a + b + c
-
-
-f = curry(foo, 3)
-print(f("1")("2")("3"))
-f = uncurry(f, 2)
-print(f(1, 2)(3))
