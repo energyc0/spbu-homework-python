@@ -10,10 +10,10 @@ class PriorityPair:
 
     # For debug purposes
     def __str__(self):
-        return f"<!({self.priority})!, {self.value}>"
+        return f'<!({self.priority})!, {self.value}>'
     # For debug purposes
     def __repr__(self):
-        return f"<!({self.priority})!, {self.value}>"
+        return f'<!({self.priority})!, {self.value}>'
     
 def encode(s: str) -> tuple[str, dict]:
     # Count frequences of characters.
@@ -66,7 +66,7 @@ def encode(s: str) -> tuple[str, dict]:
         sorted_frequency.put(right)
     
     # Construct result encoded string.
-    output_string = ""
+    output_string = ''
     for ch in s:
         output_string += codes[ch]
     return (output_string, codes)
@@ -77,14 +77,5 @@ def decode(codes: dict, s: str) -> str:
 def encode_f(file):
     pass
 
-def decode(file):
+def decode_f(file):
     pass
-
-def test_encode(input: str):
-    out = (encode(input))
-    print(out)
-    print(len(out[0]) , len(out[1]))
-
-#test_encode("a")
-#test_encode("aaa")
-#test_encode("ab")
