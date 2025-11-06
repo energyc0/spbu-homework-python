@@ -16,7 +16,7 @@ class PriorityPair:
         return f"<!({self.priority})!, {self.value}>"
     
 def encode(s: str) -> tuple[str, dict]:
-    # Count frequences of characters
+    # Count frequences of characters.
     frequency = dict()
     for ch in s:
         if ch in frequency:
@@ -24,10 +24,11 @@ def encode(s: str) -> tuple[str, dict]:
         else:
             frequency[ch] = 1
 
-    print(len(frequency))
+    # Edge case, when string consists of one type of characters.
     if len(frequency) == 1:
-        return tuple([len(s) * '0', (s[0], '0')])
-    # Put frequences into priority queue
+        return tuple([len(s) * '0', {s[0]: '0'}])
+    
+    # Put frequences into priority queue.
     sorted_frequency = PriorityQueue()
     for i in frequency:
         item = PriorityPair(frequency[i], i)
@@ -39,25 +40,22 @@ def encode(s: str) -> tuple[str, dict]:
         least1 = sorted_frequency.get()
         least2 = sorted_frequency.get()
         item = PriorityPair(least1.priority + least2.priority, (least1, least2))
-        #print(item)
         sorted_frequency.put(item)
     
     # Unwrap the characters and assign codes to them.
-    #print(sorted_frequency.queue[0])
-    codes = dict()
+    codes = {}
     if not sorted_frequency.empty():
         codes[sorted_frequency.queue[0]] = ''
     
     while not sorted_frequency.empty():
         item = sorted_frequency.get()
         code = codes[item]
-        #print(code, item.value)
+        # Basic case, when we get to the leaf.
         if isinstance(item.value, str):
             codes.pop(item)
             codes[item.value] = code
-            #print(item.value, code)
             continue
-
+        # Else try to unwrap the node into two children.
         left = item.value[0]
         right = item.value[1]
         codes.pop(item)
@@ -67,6 +65,7 @@ def encode(s: str) -> tuple[str, dict]:
         sorted_frequency.put(left)
         sorted_frequency.put(right)
     
+    # Construct result encoded string.
     output_string = ""
     for ch in s:
         output_string += codes[ch]
@@ -84,8 +83,8 @@ def decode(file):
 def test_encode(input: str):
     out = (encode(input))
     print(out)
-    print(len(out[0]))
+    print(len(out[0]) , len(out[1]))
 
-test_encode("aaaaabbbbcccddffeeee")
-test_encode("aaa")
-test_encode("ab")
+#test_encode("a")
+#test_encode("aaa")
+#test_encode("ab")
