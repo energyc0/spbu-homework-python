@@ -1,21 +1,26 @@
 from queue import PriorityQueue
-
-class PriorityPair:
-    def __init__(self, priority, value):
-        self.priority = priority
-        self.value = value
-
-    def __lt__(self, other: 'PriorityPair'):
-        return self.priority < other.priority
-
-    # For debug purposes
-    def __str__(self):
-        return f'<!({self.priority})!, {self.value}>'
-    # For debug purposes
-    def __repr__(self):
-        return f'<!({self.priority})!, {self.value}>'
     
 def encode(s: str) -> tuple[str, dict]:
+    '''
+    Encode string using Huffman coding algorithm.
+    Return encoded string and dictionary containing codes.
+    '''
+    class PriorityPair:
+        '''For priority queue pair implementation'''
+        def __init__(self, priority, value):
+            self.priority = priority
+            self.value = value
+
+        def __lt__(self, other: 'PriorityPair'):
+            return self.priority < other.priority
+
+        # For debug purposes
+        def __str__(self):
+            return f'<!({self.priority})!, {self.value}>'
+        # For debug purposes
+        def __repr__(self):
+            return f'<!({self.priority})!, {self.value}>'
+    
     # Count frequences of characters.
     frequency = dict()
     for ch in s:
