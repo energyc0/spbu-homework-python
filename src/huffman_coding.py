@@ -86,6 +86,7 @@ def decode(codes: dict, s: str) -> str:
     """
     Decode string with given codes.
     'codes' must contain character as key and code as value.
+    Raises TypeError if undefined code was found.
     """
 
     class TrieNode:
@@ -122,6 +123,8 @@ def decode(codes: dict, s: str) -> str:
             i = 0
             result_string = ""
             while not node.value:
+                if i >= len(word):
+                    return (False, None)
                 ch = word[i]
                 if ch not in node.children:
                     return (False, None)
@@ -142,7 +145,7 @@ def decode(codes: dict, s: str) -> str:
     while i < len(s):
         is_found, decoded = trie_codes.search_first(s[i:])
         if not is_found:
-            raise ValueError("Undefined code. Failed to decode.")
+            raise TypeError("Undefined code. Failed to decode.")
         # Add decoded character and advance the iterator
         output += decoded
         i += len(codes[decoded])
@@ -155,3 +158,6 @@ def encode_f(file):
 
 def decode_f(file):
     pass
+
+
+# print(decode({"a": "000", "c": "01", "b": "10", "d": "11"}, "00100111"))

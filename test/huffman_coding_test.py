@@ -83,3 +83,16 @@ def test_edge_cases_decode(codes, encoded, decoded):
 def test_encode_decode(input):
     encoded, codes = src.huffman_coding.encode(input)
     assert src.huffman_coding.decode(codes, encoded) == input
+
+
+@pytest.mark.parametrize(
+    ["encoded", "codes"],
+    [
+        ("00100111", {"a": "000", "c": "01", "b": "10", "d": "11"}),
+        ("00100111", {"a": "00", "c": "011", "b": "10", "d": "11"}),
+        ("0", {}),
+    ],
+)
+def test_wrong_decode(codes, encoded):
+    with pytest.raises(TypeError):
+        src.huffman_coding.decode(codes, encoded)
