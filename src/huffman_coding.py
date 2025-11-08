@@ -1,28 +1,33 @@
 from queue import PriorityQueue
-    
+
+
 def encode(s: str) -> tuple[str, dict]:
-    '''
+    """
     Encode string using Huffman coding algorithm.
     Return encoded string and dictionary containing codes.
-    '''
+    Key -> character, Value -> code.
+    """
+
     class PriorityPair:
-        '''For priority queue pair implementation'''
+        """For priority queue pair implementation"""
+
         def __init__(self, priority, value):
             self.priority = priority
             self.value = value
 
-        def __lt__(self, other: 'PriorityPair'):
+        def __lt__(self, other: "PriorityPair"):
             return self.priority < other.priority
 
         # For debug purposes
         def __str__(self):
-            return f'<!({self.priority})!, {self.value}>'
+            return f"<!({self.priority})!, {self.value}>"
+
         # For debug purposes
         def __repr__(self):
-            return f'<!({self.priority})!, {self.value}>'
-    
+            return f"<!({self.priority})!, {self.value}>"
+
     # Count frequences of characters.
-    frequency = dict()
+    frequency = {}
     for ch in s:
         if ch in frequency:
             frequency[ch] += 1
@@ -31,8 +36,8 @@ def encode(s: str) -> tuple[str, dict]:
 
     # Edge case, when string consists of one type of characters.
     if len(frequency) == 1:
-        return tuple([len(s) * '0', {s[0]: '0'}])
-    
+        return {[len(s) * "0", {s[0]: "0"}]}
+
     # Put frequences into priority queue.
     sorted_frequency = PriorityQueue()
     for i in frequency:
@@ -46,12 +51,12 @@ def encode(s: str) -> tuple[str, dict]:
         least2 = sorted_frequency.get()
         item = PriorityPair(least1.priority + least2.priority, (least1, least2))
         sorted_frequency.put(item)
-    
+
     # Unwrap the characters and assign codes to them.
     codes = {}
     if not sorted_frequency.empty():
-        codes[sorted_frequency.queue[0]] = ''
-    
+        codes[sorted_frequency.queue[0]] = ""
+
     while not sorted_frequency.empty():
         item = sorted_frequency.get()
         code = codes[item]
@@ -65,22 +70,97 @@ def encode(s: str) -> tuple[str, dict]:
         right = item.value[1]
         codes.pop(item)
 
-        codes[left] = code + '0'
-        codes[right] = code + '1'
+        codes[left] = code + "0"
+        codes[right] = code + "1"
         sorted_frequency.put(left)
         sorted_frequency.put(right)
-    
+
     # Construct result encoded string.
-    output_string = ''
+    output_string = ""
     for ch in s:
         output_string += codes[ch]
     return (output_string, codes)
-    
+
+
 def decode(codes: dict, s: str) -> str:
-    pass
+    """
+    Decode string with given codes.
+    'codes' must contain character as key and code as value.
+    """
+
+    class TrieNode:
+        """Node for Trie"""
+
+        def __init__(self):
+            self.children = {}
+            self.value = None
+
+    class Trie:
+        """Trie implementation for improving decoding efficiency."""
+
+        def __init__(self):
+            self.root = TrieNode()
+
+        def insert(self, word: str, value):
+            """
+            Insert string into Trie and assign value to it.
+            """
+            node = self.root
+            for ch in word:
+                if ch not in node.children:
+                    node.children[ch] = TrieNode()
+                node = node.children[ch]
+            node.value = value
+
+        def search_first(self, word: str):
+            """
+            Find the first occurrence of the string.
+            Return (True, some_value) if found.
+            Return (False, None) if not found.
+            """
+            node = self.root
+            i = 0
+            result_string = ""
+            while not node.value:
+                ch = word[i]
+                if ch not in node.children:
+                    return (False, None)
+                result_string += ch
+                node = node.children[ch]
+                i += 1
+            return (node.value is not None, node.value)
+
+    trie_codes = Trie()
+    for code in codes:
+        # Edge case.
+        if code == "":
+            continue
+        trie_codes.insert(codes[code], code)
+
+    output = ""
+    i = 0
+    while i < len(s):
+        is_found, decoded = trie_codes.search_first(s[i:])
+        if not is_found:
+            raise ValueError("Undefined code. Failed to decode.")
+        # Add decoded character and advance the iterator
+        output += decoded
+        i += len(codes[decoded])
+    return output
+
 
 def encode_f(file):
     pass
 
+
 def decode_f(file):
     pass
+
+
+encoded, codes = encode("hello world")
+print(encoded, codes)
+print(len(encoded))
+# print(decode(codes, encoded))
+#'abracadabra'
+#'01111100100010101111100'
+#'010010101100011010100'
