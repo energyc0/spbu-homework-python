@@ -36,7 +36,7 @@ def encode(s: str) -> tuple[str, dict]:
 
     # Edge case, when string consists of one type of characters.
     if len(frequency) == 1:
-        return ([len(s) * "0", {s[0]: "0"}])
+        return [len(s) * "0", {s[0]: "0"}]
 
     # Put frequences into priority queue.
     sorted_frequency = PriorityQueue()
@@ -155,12 +155,3 @@ def encode_f(file):
 
 def decode_f(file):
     pass
-
-
-encoded, codes = encode("hello world")
-print(encoded, codes)
-print(len(encoded))
-# print(decode(codes, encoded))
-#'abracadabra'
-#'01111100100010101111100'
-#'010010101100011010100'

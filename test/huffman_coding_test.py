@@ -20,8 +20,8 @@ def test_basic_encode(input, expected):
     [("a", (1, 1)), ("", (0, 0)), ("abababab", (8, 2)), ("a\nb\ta", (10, 4))],
 )
 def test_edge_cases_encode(input, expected):
-    output = src.huffman_coding.encode(input)
-    assert (len(output[0]), len(output[1])) == expected
+    encoded, codes = src.huffman_coding.encode(input)
+    assert (len(encoded), len(codes)) == expected
 
 
 @pytest.mark.parametrize(
@@ -69,3 +69,17 @@ def test_basic_decode(codes, encoded, decoded):
 )
 def test_edge_cases_decode(codes, encoded, decoded):
     assert src.huffman_coding.decode(codes, encoded) == decoded
+
+
+@pytest.mark.parametrize(
+    "input",
+    [
+        " ",
+        "abc abc",
+        "Hello, world!",
+        "a",
+    ],
+)
+def test_encode_decode(input):
+    encoded, codes = src.huffman_coding.encode(input)
+    assert src.huffman_coding.decode(codes, encoded) == input
