@@ -36,7 +36,7 @@ def encode(s: str) -> tuple[str, dict]:
 
     # Edge case, when string consists of one type of characters.
     if len(frequency) == 1:
-        return {[len(s) * "0", {s[0]: "0"}]}
+        return ([len(s) * "0", {s[0]: "0"}])
 
     # Put frequences into priority queue.
     sorted_frequency = PriorityQueue()

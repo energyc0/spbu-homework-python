@@ -68,5 +68,4 @@ def test_basic_decode(codes, encoded, decoded):
     ],
 )
 def test_edge_cases_decode(codes, encoded, decoded):
-    pass
-    # assert src.huffman_coding.decode(codes, encoded) == decoded
+    assert src.huffman_coding.decode(codes, encoded) == decoded
