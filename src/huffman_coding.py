@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 
 
-def encode(s: str) -> tuple[str, dict]:
+def encode(msg: str) -> tuple[str, dict[str,str]]:
     """
     Encode string using Huffman coding algorithm.
     Return encoded string and dictionary containing codes.
@@ -28,7 +28,7 @@ def encode(s: str) -> tuple[str, dict]:
 
     # Count frequences of characters.
     frequency = {}
-    for ch in s:
+    for ch in msg:
         if ch in frequency:
             frequency[ch] += 1
         else:
@@ -36,7 +36,7 @@ def encode(s: str) -> tuple[str, dict]:
 
     # Edge case, when string consists of one type of characters.
     if len(frequency) == 1:
-        return [len(s) * "0", {s[0]: "0"}]
+        return [len(msg) * "0", {msg[0]: "0"}]
 
     # Put frequences into priority queue.
     sorted_frequency = PriorityQueue()
@@ -77,12 +77,12 @@ def encode(s: str) -> tuple[str, dict]:
 
     # Construct result encoded string.
     output_string = ""
-    for ch in s:
+    for ch in msg:
         output_string += codes[ch]
     return (output_string, codes)
 
 
-def decode(codes: dict, s: str) -> str:
+def decode(codes: dict[str, str], msg: str) -> str:
     """
     Decode string with given codes.
     'codes' must contain character as key and code as value.
@@ -142,8 +142,8 @@ def decode(codes: dict, s: str) -> str:
 
     output = ""
     i = 0
-    while i < len(s):
-        is_found, decoded = trie_codes.search_first(s[i:])
+    while i < len(msg):
+        is_found, decoded = trie_codes.search_first(msg[i:])
         if not is_found:
             raise TypeError("Undefined code. Failed to decode.")
         # Add decoded character and advance the iterator
