@@ -1,7 +1,7 @@
 from queue import PriorityQueue
 
 
-def encode(msg: str) -> tuple[str, dict[str,str]]:
+def encode(msg: str) -> tuple[str, dict[str, str]]:
     """
     Encode string using Huffman coding algorithm.
     Return encoded string and dictionary containing codes.
@@ -152,12 +152,76 @@ def decode(codes: dict[str, str], msg: str) -> str:
     return output
 
 
-def encode_f(file):
-    pass
+def encode_fstr(file_in: str, file_out: str):
+    """
+    Encode file with name 'file_in' and
+    write the result into file with name 'file_out'.
+    """
+    with open(file_in) as fin:
+        data = fin.read()
+        encoded_data, codes = encode(data)
+        with open(file_out, "w") as fout:
+            # Write file signature.
+            fout.write("HC30\n")
+            # Write codes.
+            for ch in codes:
+                # Wrap escape sequences.
+                fout.write(repr(ch) + " " + codes[ch] + "\n")
+            # Write data.
+            fout.write(encoded_data)
+            print(codes)
 
 
-def decode_f(file):
-    pass
+def decode_fstr(file_in: str, file_out: str):
+    """
+    Decode file with name 'file_in' and
+    write the result into file with name 'file_out'.
+    Raise Exception if undefined signature of the file
+    was found. That means it was not encoded with encode_fstr().
+    """
+
+    # For escape sequences.
+    def decode_escape(ch: str):
+        escape_dict = {
+            "\\n": "\n",
+            "\\t": "\t",
+            "\\r": "\r",
+            "\\\\": "\\",
+            "\\0": "\0",
+            '\\"': '"',
+            "\\'": "'",
+        }
+        return escape_dict.get(ch, ch)
+
+    with open(file_in) as fin:
+        if fin.readline() != "HC30\n":
+            raise Exception("Undefined signature of the file.")
+        # Read all the lines, the last line is the encoded data.
+        lines = fin.readlines()
+        codes = {}
+        for line in lines[1:-1:]:
+            ch, code = line.split()
+            ch = decode_escape(ch[1:-1])
+            codes[ch] = code
+        decoded_data = decode(codes, lines[-1])
+        with open(file_out, "w") as fout:
+            fout.write(decoded_data)
 
 
-# print(decode({"a": "000", "c": "01", "b": "10", "d": "11"}, "00100111"))
+if __name__ == "__main__":
+    from sys import argv
+
+    def print_info():
+        print(f"Usage: {argv[0]} [flags] [input filename] [output filename]")
+        print('Flags: "-a" / "-x" / "-h"')
+        print('"-a" - to encode file and put the result into output file')
+        print('"-x" - to decode file and put the result into output file')
+        print('"-h" - to print help info')
+
+    if len(argv) != 4 or argv[1] not in ("-a", "-x"):
+        print_info()
+        exit(1)
+    if argv[1] == "-a":
+        encode_fstr(argv[2], argv[3])
+    else:
+        decode_fstr(argv[2], argv[3])
