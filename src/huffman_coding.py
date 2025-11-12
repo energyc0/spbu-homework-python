@@ -145,7 +145,7 @@ def decode(codes: dict[str, str], msg: str) -> str:
     while i < len(msg):
         is_found, decoded = trie_codes.search_first(msg[i:])
         if not is_found:
-            raise TypeError("Undefined code. Failed to decode.")
+            raise TypeError(f"Undefined code: {msg[i:]}. Failed to decode.")
         # Add decoded character and advance the iterator
         output += decoded
         i += len(codes[decoded])
@@ -169,7 +169,6 @@ def encode_fstr(file_in: str, file_out: str):
                 fout.write(repr(ch) + " " + codes[ch] + "\n")
             # Write data.
             fout.write(encoded_data)
-            print(codes)
 
 
 def decode_fstr(file_in: str, file_out: str):
@@ -199,7 +198,7 @@ def decode_fstr(file_in: str, file_out: str):
         # Read all the lines, the last line is the encoded data.
         lines = fin.readlines()
         codes = {}
-        for line in lines[1:-1:]:
+        for line in lines[:-1]:
             ch, code = line.split()
             ch = decode_escape(ch[1:-1])
             codes[ch] = code
@@ -221,7 +220,10 @@ if __name__ == "__main__":
     if len(argv) != 4 or argv[1] not in ("-a", "-x"):
         print_info()
         exit(1)
-    if argv[1] == "-a":
-        encode_fstr(argv[2], argv[3])
-    else:
-        decode_fstr(argv[2], argv[3])
+    try:
+        if argv[1] == "-a":
+            encode_fstr(argv[2], argv[3])
+        else:
+            decode_fstr(argv[2], argv[3])
+    except Exception as err:
+        print(err)
