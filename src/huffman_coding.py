@@ -166,7 +166,7 @@ def encode_fstr(file_in: str, file_out: str):
             # Write codes.
             for ch in codes:
                 # Wrap escape sequences.
-                fout.write(repr(ch) + " " + codes[ch] + "\n")
+                fout.write(repr(ch) + "\n" + codes[ch] + "\n")
             # Write data.
             fout.write(encoded_data)
 
@@ -189,6 +189,7 @@ def decode_fstr(file_in: str, file_out: str):
             "\\0": "\0",
             '\\"': '"',
             "\\'": "'",
+            "": " ",
         }
         return escape_dict.get(ch, ch)
 
@@ -198,10 +199,19 @@ def decode_fstr(file_in: str, file_out: str):
         # Read all the lines, the last line is the encoded data.
         lines = fin.readlines()
         codes = {}
-        for line in lines[:-1]:
-            ch, code = line.split()
-            ch = decode_escape(ch[1:-1])
+        codes_count = len(lines[:-1])
+        if codes_count % 2 != 0:
+            raise Exception("File code table corruption.")
+
+        i = 0
+        while i < codes_count:
+            # Remove quotes and newline, decode escape sequences.
+            ch = decode_escape(lines[i][1:-2])
+            code = lines[i + 1][:-1]
+
             codes[ch] = code
+            i += 2
+
         decoded_data = decode(codes, lines[-1])
         with open(file_out, "w") as fout:
             fout.write(decoded_data)
