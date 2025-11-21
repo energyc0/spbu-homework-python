@@ -24,7 +24,25 @@ class Graph:
                 if v not in visited:
                     to_visit.append(v)
         return False
-    
+    def dfs(self) -> list[int]:
+        '''
+        Depth-first search algorithm.
+        Returns all the vertices in the order of the algorithm's passage.
+        '''
+        visited = []
+        to_visit = list(range(len(self.vertices)-1, -1, -1))
+
+        while len(to_visit) > 0:
+            vertex = to_visit.pop()
+            if vertex in visited:
+                continue
+            visited.append(vertex)
+            for v in self.vertices[vertex]:
+                to_visit.append(v)
+
+        return visited
+            
+
 edges = [
     [1, 2],       # Компонента 1: 0-1-2
     [0],
@@ -37,3 +55,6 @@ edges = [
 # Пути: 0→2: [0,2], 3→5: [3,5], 0→6: нет пути
 gr = Graph(edges)
 print(gr.has_path(0, 3))
+print(gr.dfs())
+l = list(range(5, 0, -1))
+print(l)
