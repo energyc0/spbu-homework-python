@@ -89,66 +89,22 @@ def decode(codes: dict[str, str], msg: str) -> str:
     Raises TypeError if undefined code was found.
     """
 
-    class TrieNode:
-        """Node for Trie"""
-
-        def __init__(self):
-            self.children = {}
-            self.value = None
-
-    class Trie:
-        """Trie implementation for improving decoding efficiency."""
-
-        def __init__(self):
-            self.root = TrieNode()
-
-        def insert(self, word: str, value):
-            """
-            Insert string into Trie and assign value to it.
-            """
-            node = self.root
-            for ch in word:
-                if ch not in node.children:
-                    node.children[ch] = TrieNode()
-                node = node.children[ch]
-            node.value = value
-
-        def search_first(self, word: str):
-            """
-            Find the first occurrence of the string.
-            Return (True, some_value) if found.
-            Return (False, None) if not found.
-            """
-            node = self.root
-            i = 0
-            result_string = ""
-            while not node.value:
-                if i >= len(word):
-                    return (False, None)
-                ch = word[i]
-                if ch not in node.children:
-                    return (False, None)
-                result_string += ch
-                node = node.children[ch]
-                i += 1
-            return (node.value is not None, node.value)
-
-    trie_codes = Trie()
-    for code in codes:
-        # Edge case.
-        if code == "":
-            continue
-        trie_codes.insert(codes[code], code)
+    # Reverse code table.
+    char_table = {}
+    for char in codes:
+        char_table[codes[char]] = char
 
     output = ""
-    i = 0
-    while i < len(msg):
-        is_found, decoded = trie_codes.search_first(msg[i:])
-        if not is_found:
-            raise TypeError(f"Undefined code: {msg[i:]}. Failed to decode.")
-        # Add decoded character and advance the iterator
-        output += decoded
-        i += len(codes[decoded])
+    start = 0
+    end = 0
+    while end < len(msg):
+        if msg[start : end + 1] in char_table:
+            output += char_table[msg[start : end + 1]]
+            start = end + 1
+        end += 1
+
+    if start != end:
+        raise TypeError(f"Undefined code: {msg[start:end]}. Failed to decode.")
     return output
 
 
